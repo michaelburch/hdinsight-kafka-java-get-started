@@ -3,10 +3,17 @@ package com.microsoft.example;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.CommonClientConfigs;
 import java.util.Properties;
 import java.util.Arrays;
 
 public class Consumer {
+    public static Boolean sslEnabled = false;
+    public static void consume(String brokers, String groupId, String topicName, Boolean ssl)
+    {
+        sslEnabled = true;
+        consume(brokers,groupId,topicName);
+    }
     public static int consume(String brokers, String groupId, String topicName) {
         // Create a consumer
         KafkaConsumer<String, String> consumer;
@@ -25,7 +32,11 @@ public class Consumer {
 
         // specify the protocol for Domain Joined clusters
         //properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
-
+        if (sslEnabled)
+        {
+            System.out.println("Executing consumer with SSL enabled:");
+            properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+        }
         consumer = new KafkaConsumer<>(properties);
 
         // Subscribe to the 'test' topic

@@ -80,11 +80,19 @@ To run the consumer and producer example, use the following steps:
    
         java -jar kafka-producer-consumer.jar producer test $KAFKABROKERS
     
-    A counter displays how many records have been written.
+    Or with SSL support:
 
+        java -Djavax.net.ssl.trustStore=/home/sshuser/ssl/kafka.server.truststore.jks -jar kafka-producer-consumer.jar producer_ssl test $KAFKABROKERS
+
+    A counter displays how many records have been written.
+    
 11. Use the producer-consumer to read the records that were just written:
 
         java -jar kafka-producer-consumer.jar consumer test $KAFKABROKERS
+
+    Or with SSL support:
+
+        java -Djavax.net.ssl.trustStore=/home/sshuser/ssl/kafka.server.truststore.jks -jar kafka-producer-consumer.jar consumer_ssl test $KAFKABROKERS
     
     This returns a list of the random sentences, along with a count of how many are read.
 

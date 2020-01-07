@@ -15,13 +15,25 @@ public class Run {
         // Get the brokers
         String brokers = args[2];
         String topicName = args[1];
+        String groupId;
         switch(args[0].toLowerCase()) {
             case "producer":
                 Producer.produce(brokers, topicName);
                 break;
+            case "producer_ssl":
+                Producer.produce(brokers, topicName, true);
+                break;
+            case "consumer_ssl":
+                // Either a groupId was passed in, or we need a random one 
+                if(args.length == 4) {
+                    groupId = args[3];
+                } else {
+                    groupId = UUID.randomUUID().toString();
+                }
+                Consumer.consume(brokers, groupId, topicName, true);
+                break;
             case "consumer":
                 // Either a groupId was passed in, or we need a random one
-                String groupId;
                 if(args.length == 4) {
                     groupId = args[3];
                 } else {
@@ -46,7 +58,7 @@ public class Run {
     // Display usage
     public static void usage() {
         System.out.println("Usage:");
-        System.out.println("kafka-example.jar <producer|consumer|describe|create|delete> <topicName> brokerhosts [groupid]");
+        System.out.println("kafka-example.jar <producer|producer_ssl|consumer|consumer_ssl|describe|create|delete> <topicName> brokerhosts [groupid]");
         System.exit(1);
     }
 }

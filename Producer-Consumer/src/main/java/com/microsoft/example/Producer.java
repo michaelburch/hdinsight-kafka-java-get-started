@@ -18,9 +18,14 @@ import java.io.IOException;
 
 public class Producer
 {
+    public static Boolean sslEnabled = false;
+    public static void produce(String brokers, String topicName, Boolean ssl) throws IOException
+    {
+        sslEnabled = true;
+        produce(brokers,topicName);
+    }
     public static void produce(String brokers, String topicName) throws IOException
     {
-
         // Set properties used to configure the producer
         Properties properties = new Properties();
         // Set the brokers (bootstrap servers)
@@ -30,7 +35,12 @@ public class Producer
         properties.setProperty("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
         // specify the protocol for Domain Joined clusters
         //properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
-
+        if (sslEnabled)
+        {
+            System.out.println("Executing producer with SSL enabled:");
+            properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+        }
+        
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
 
         // So we can generate random sentences
