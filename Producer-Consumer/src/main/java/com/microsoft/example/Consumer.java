@@ -32,7 +32,7 @@ public class Consumer {
 
         // specify the protocol for Domain Joined clusters
         //properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
-        if (sslEnabled)
+        if (sslEnabled || brokers.contains(":9093"))
         {
             System.out.println("Executing consumer with SSL enabled:");
             properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");

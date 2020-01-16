@@ -35,7 +35,7 @@ public class Producer
         properties.setProperty("value.serializer","org.apache.kafka.common.serialization.StringSerializer");
         // specify the protocol for Domain Joined clusters
         //properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
-        if (sslEnabled)
+        if (sslEnabled || brokers.contains(":9093"))
         {
             System.out.println("Executing producer with SSL enabled:");
             properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");

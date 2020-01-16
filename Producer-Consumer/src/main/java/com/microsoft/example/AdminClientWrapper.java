@@ -22,6 +22,7 @@ import java.io.IOException;
 
 public class AdminClientWrapper {
 
+    public static Boolean sslEnabled = false;
     public static Properties getProperties(String brokers) {
         Properties properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
@@ -35,10 +36,20 @@ public class AdminClientWrapper {
         return properties;
     }
 
+    public static void describeTopics(String brokers, String topicName, Boolean ssl) throws IOException
+    {
+        sslEnabled = true;
+        describeTopics(brokers,topicName);
+    }
+
     public static void describeTopics(String brokers, String topicName) throws IOException {
         // Set properties used to configure admin client
         Properties properties = getProperties(brokers);
-
+        if (sslEnabled || brokers.contains(":9093"))
+        {
+            System.out.println("Describing topic with SSL enabled:");
+            properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+        }
         try (final AdminClient adminClient = KafkaAdminClient.create(properties)) {
             // Make async call to describe the topic.
             final DescribeTopicsResult describeTopicsResult = adminClient.describeTopics(Collections.singleton(topicName));
@@ -52,10 +63,20 @@ public class AdminClientWrapper {
         }
     }
 
+    public static void deleteTopics(String brokers, String topicName, Boolean ssl) throws IOException
+    {
+        sslEnabled = true;
+        deleteTopics(brokers,topicName);
+    }
+
     public static void deleteTopics(String brokers, String topicName) throws IOException {
         // Set properties used to configure admin client
         Properties properties = getProperties(brokers);
-
+        if (sslEnabled || brokers.contains(":9093"))
+        {
+            System.out.println("Deleting topic with SSL enabled:");
+            properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+        }
         try (final AdminClient adminClient = KafkaAdminClient.create(properties)) {
             final DeleteTopicsResult deleteTopicsResult = adminClient.deleteTopics(Collections.singleton(topicName));
             deleteTopicsResult.values().get(topicName).get();
@@ -67,9 +88,20 @@ public class AdminClientWrapper {
         }
     }
 
+    public static void createTopics(String brokers, String topicName, Boolean ssl) throws IOException
+    {
+        sslEnabled = true;
+        createTopics(brokers,topicName);
+    }
+
     public static void createTopics(String brokers, String topicName) throws IOException {
         // Set properties used to configure admin client
         Properties properties = getProperties(brokers);
+        if (sslEnabled || brokers.contains(":9093"))
+        {
+            System.out.println("Creating topic with SSL enabled:");
+            properties.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SSL");
+        }
 
         try (final AdminClient adminClient = KafkaAdminClient.create(properties)) {
             int numPartitions = 8;

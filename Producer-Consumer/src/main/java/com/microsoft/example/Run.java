@@ -44,11 +44,20 @@ public class Run {
             case "describe":
                 AdminClientWrapper.describeTopics(brokers, topicName);
                 break;
+            case "describe_ssl":
+                AdminClientWrapper.describeTopics(brokers, topicName, true);
+                break;
             case "create":
                 AdminClientWrapper.createTopics(brokers, topicName);
                 break;
+            case "create_ssl":
+                AdminClientWrapper.createTopics(brokers, topicName, true);
+                break;
             case "delete":
                 AdminClientWrapper.deleteTopics(brokers, topicName);
+                break;
+            case "delete_ssl":
+                AdminClientWrapper.deleteTopics(brokers, topicName, true);
                 break;
             default:
                 usage();
@@ -58,7 +67,7 @@ public class Run {
     // Display usage
     public static void usage() {
         System.out.println("Usage:");
-        System.out.println("kafka-example.jar <producer|producer_ssl|consumer|consumer_ssl|describe|create|delete> <topicName> brokerhosts [groupid]");
+        System.out.println("kafka-example.jar <producer|producer_ssl|consumer|consumer_ssl|describe|describe_ssl|create|create_ssl|delete|delete_ssl> <topicName> brokerhosts [groupid]");
         System.exit(1);
     }
 }
